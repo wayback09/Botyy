@@ -1,0 +1,6 @@
+{
+  "name": "Pulse",
+  "description": "Native Android messaging and social app with real-time chat, social feeds, creator communities, and broadcast channels.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

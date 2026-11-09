@@ -1,0 +1,309 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with social counts and status",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "username": { "type": "string" },
+        "displayName": { "type": "string" },
+        "bio": { "type": "string" },
+        "avatarUrl": { "type": "string" },
+        "followersCount": { "type": "integer" },
+        "followingCount": { "type": "integer" },
+        "postsCount": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "isPrivate": { "type": "boolean" }
+      },
+      "required": ["uid", "username", "displayName", "createdAt"]
+    },
+    "Username": {
+      "title": "Username",
+      "description": "Unique username claim lookup",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "claimedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "claimedAt"]
+    },
+    "Contact": {
+      "title": "Contact",
+      "description": "Saved contact for 1-to-1 chat",
+      "type": "object",
+      "properties": {
+        "contactUid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "addedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["contactUid", "displayName", "addedAt"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Direct or group chat conversation room",
+      "type": "object",
+      "properties": {
+        "conversationId": { "type": "string" },
+        "type": { "type": "string", "enum": ["DIRECT", "GROUP"] },
+        "memberUids": { "type": "array" },
+        "adminUids": { "type": "array" },
+        "title": { "type": "string" },
+        "iconUrl": { "type": "string" },
+        "lastMessageText": { "type": "string" },
+        "lastMessageSenderId": { "type": "string" },
+        "lastMessageTimestamp": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["conversationId", "type", "memberUids", "createdAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Individual message inside a conversation",
+      "type": "object",
+      "properties": {
+        "messageId": { "type": "string" },
+        "conversationId": { "type": "string" },
+        "senderUid": { "type": "string" },
+        "content": { "type": "string" },
+        "mediaUrl": { "type": "string" },
+        "mediaType": { "type": "string" },
+        "status": { "type": "string", "enum": ["SENT", "DELIVERED", "READ"] },
+        "readBy": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["messageId", "conversationId", "senderUid", "content", "createdAt"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "Social feed post with media and captions",
+      "type": "object",
+      "properties": {
+        "postId": { "type": "string" },
+        "authorUid": { "type": "string" },
+        "authorUsername": { "type": "string" },
+        "authorAvatarUrl": { "type": "string" },
+        "caption": { "type": "string" },
+        "mediaUrls": { "type": "array" },
+        "likesCount": { "type": "integer" },
+        "commentsCount": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["postId", "authorUid", "authorUsername", "caption", "createdAt"]
+    },
+    "Follow": {
+      "title": "Follow",
+      "description": "Follower-following relationship record",
+      "type": "object",
+      "properties": {
+        "followerUid": { "type": "string" },
+        "targetUid": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["followerUid", "targetUid", "createdAt"]
+    },
+    "FeedItem": {
+      "title": "FeedItem",
+      "description": "Fan-out timeline item for a user",
+      "type": "object",
+      "properties": {
+        "postId": { "type": "string" },
+        "authorUid": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["postId", "authorUid", "createdAt"]
+    },
+    "Community": {
+      "title": "Community",
+      "description": "Creator community space",
+      "type": "object",
+      "properties": {
+        "communityId": { "type": "string" },
+        "creatorUid": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "iconUrl": { "type": "string" },
+        "membersCount": { "type": "integer" },
+        "isPrivate": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["communityId", "creatorUid", "name", "description", "createdAt"]
+    },
+    "CommunityMember": {
+      "title": "CommunityMember",
+      "description": "Member inside a community",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "role": { "type": "string", "enum": ["MEMBER", "MODERATOR", "ADMIN"] },
+        "joinedAt": { "type": "string", "format": "date-time" },
+        "isBanned": { "type": "boolean" }
+      },
+      "required": ["userId", "role", "joinedAt"]
+    },
+    "CommunityPost": {
+      "title": "CommunityPost",
+      "description": "Post published inside a community",
+      "type": "object",
+      "properties": {
+        "postId": { "type": "string" },
+        "communityId": { "type": "string" },
+        "authorUid": { "type": "string" },
+        "authorUsername": { "type": "string" },
+        "content": { "type": "string" },
+        "mediaUrls": { "type": "array" },
+        "likesCount": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["postId", "communityId", "authorUid", "authorUsername", "content", "createdAt"]
+    },
+    "Channel": {
+      "title": "Channel",
+      "description": "Broadcast channel run by a creator",
+      "type": "object",
+      "properties": {
+        "channelId": { "type": "string" },
+        "ownerUid": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "iconUrl": { "type": "string" },
+        "subscribersCount": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["channelId", "ownerUid", "name", "description", "createdAt"]
+    },
+    "ChannelSubscriber": {
+      "title": "ChannelSubscriber",
+      "description": "Subscriber to a broadcast channel",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "subscribedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "subscribedAt"]
+    },
+    "ChannelPost": {
+      "title": "ChannelPost",
+      "description": "Broadcast post inside a creator channel",
+      "type": "object",
+      "properties": {
+        "postId": { "type": "string" },
+        "channelId": { "type": "string" },
+        "authorUid": { "type": "string" },
+        "content": { "type": "string" },
+        "mediaUrls": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["postId", "channelId", "authorUid", "content", "createdAt"]
+    },
+    "Block": {
+      "title": "Block",
+      "description": "User block record",
+      "type": "object",
+      "properties": {
+        "blockerUid": { "type": "string" },
+        "blockedUid": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["blockerUid", "blockedUid", "createdAt"]
+    },
+    "Report": {
+      "title": "Report",
+      "description": "Content or user safety report",
+      "type": "object",
+      "properties": {
+        "reportId": { "type": "string" },
+        "reporterUid": { "type": "string" },
+        "targetType": { "type": "string" },
+        "targetId": { "type": "string" },
+        "reason": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["reportId", "reporterUid", "targetType", "targetId", "reason", "createdAt"]
+    },
+    "FcmToken": {
+      "title": "FcmToken",
+      "description": "FCM device registration token",
+      "type": "object",
+      "properties": {
+        "token": { "type": "string" },
+        "userId": { "type": "string" },
+        "platform": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["token", "userId", "platform", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/usernames/{username}": {
+      "schema": "Username",
+      "description": "Username uniqueness registry"
+    },
+    "/contacts/{userId}/userContacts/{contactUid}": {
+      "schema": "Contact",
+      "description": "User contact list"
+    },
+    "/conversations/{conversationId}": {
+      "schema": "Conversation",
+      "description": "Direct and group conversation threads"
+    },
+    "/conversations/{conversationId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Messages inside conversations"
+    },
+    "/posts/{postId}": {
+      "schema": "Post",
+      "description": "Public social posts"
+    },
+    "/follows/{followId}": {
+      "schema": "Follow",
+      "description": "Social graph follower-following links"
+    },
+    "/feeds/{userId}/items/{postId}": {
+      "schema": "FeedItem",
+      "description": "Personalized fan-out timeline items"
+    },
+    "/communities/{communityId}": {
+      "schema": "Community",
+      "description": "Creator communities"
+    },
+    "/communities/{communityId}/members/{memberId}": {
+      "schema": "CommunityMember",
+      "description": "Community members and roles"
+    },
+    "/communities/{communityId}/posts/{postId}": {
+      "schema": "CommunityPost",
+      "description": "Posts inside community spaces"
+    },
+    "/channels/{channelId}": {
+      "schema": "Channel",
+      "description": "Creator one-way broadcast channels"
+    },
+    "/channels/{channelId}/subscribers/{subscriberId}": {
+      "schema": "ChannelSubscriber",
+      "description": "Channel subscribers"
+    },
+    "/channels/{channelId}/posts/{postId}": {
+      "schema": "ChannelPost",
+      "description": "Channel broadcast posts"
+    },
+    "/blocks/{blockId}": {
+      "schema": "Block",
+      "description": "User block list"
+    },
+    "/reports/{reportId}": {
+      "schema": "Report",
+      "description": "Safety and abuse reports"
+    },
+    "/fcmTokens/{token}": {
+      "schema": "FcmToken",
+      "description": "FCM device registration tokens"
+    }
+  }
+}
